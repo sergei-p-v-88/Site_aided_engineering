@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Strength_of_materials',
+    #регистрация своих приложений
+    'strength_of_materials',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -121,7 +123,6 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-    "/Strength_of_materials/static/",
 ]
 
 # Default primary key field type

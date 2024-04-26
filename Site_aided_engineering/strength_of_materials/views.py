@@ -6,4 +6,4 @@ from django.template.loader import render_to_string
 
 
 def index(request):
-    return HttpResponse(render_to_string('Strength of materials.html'))
+    return HttpResponse(render_to_string('beam_calculation.html'))
