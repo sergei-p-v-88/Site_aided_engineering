@@ -7,8 +7,12 @@ from .models import Scheme
 
 #request - это запрос
 def index(request):
+    context = {
+        'title': 'Главная страница!!!',
+        'values': ['1 проект', '2 проект', '3 проект']
+    }
+    return render(request, 'users/home.html', context=context)
+
+
+def home(request):
     return render(request, 'users/home.html')
-
-
-def about(request):
-    return render(request, 'users/about.html')

@@ -1,10 +1,15 @@
 {% extends 'index.html' %}
 {% block body %}
     <header>
-        <nav>Сдесь будет навигация</nav>
+        <nav>
+            <ul>
+                <a href="#"><li>Домашняя страница</li></a>
+                <a href="#"><li>Новый проект</li></a>
+                <a href="#"><li>Выйти</li></a>
+            </ul>
+        </nav>
     </header>
     <main>
-        <h1>Сдесь будет основной контент</h1>
         {% block main %}{% endblock %}
     </main>
     <footer>

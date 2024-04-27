@@ -1,2 +1,9 @@
 {% extends 'base.html' %}
 {% block title %} Домашняя страница {% endblock %}
+{% block main %}
+    <h1>{{ title }}</h1>
+    <p>Сдесь планируется выводить список выполненых расчетных схем</p>
+    {% for value in values %}
+        <p>{{ value }}</p>
+    {% endfor %}
+{% endblock %}
