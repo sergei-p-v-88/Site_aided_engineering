@@ -1,24 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}  {% endblock %}
 
+{% block title %}расчетная схема{% endblock %}
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>Инженерные расчеты: расчет жестко закрепленного стержня</title>
-		<script src = "{% static 'js/main.js' %}" type="text/javascript"></script>
-	</head>
+{% block script %}
+	<script src = "{% static 'js/main.js' %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block style %}
 	<style type="text/css">
 		canvas {
 			border: solid;
 			border-radius: 5px;
 		}
 	</style>
+{% endblock %}
 
-	<body>
-		<div>
+{% block main %}
+	<div>
 			<button type ="button" id = "Beam" class ="operations" title="Для создания балки выбирите 3 точки существующие или новые">Новая балка</button>
 			<button type ="button" id = "Hard_connection" class ="operations" title="Для создания заделки выбирите сущестующие осевую и точку">Жесткая заделка</button>
 			<button type ="button" id = "Size" class ="operations" title="Для создания размера выбирите существующие осевую и 2 точки и одну ">Линейный размер</button>
@@ -32,5 +31,4 @@
 			var controller = new Controller(model);
 
 		</script>
-	</body>
-</html>
+{% endblock %}
