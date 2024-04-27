@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     #регистрация своих приложений
     'strength_of_materials',
     'users',
+    'bootstrap5',
 ]
 
 MIDDLEWARE = [
