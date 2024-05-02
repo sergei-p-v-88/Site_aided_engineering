@@ -1,18 +1,13 @@
-from django.shortcuts import render
-
-from .models import Scheme
+from django.shortcuts import render, redirect
+from strength_of_materials.models import Scheme
 
 # Create your views here.
 
 
-#request - это запрос
 def index(request):
-    context = {
-        'title': 'Главная страница!!!',
-        'values': ['1 проект', '2 проект', '3 проект']
-    }
-    return render(request, 'users/home.html', context=context)
+    return redirect('users/home')
 
 
 def home(request):
-    return render(request, 'users/home.html')
+    context = {'schemes': Scheme.objects.all()}
+    return render(request, 'users/home.html', context=context)

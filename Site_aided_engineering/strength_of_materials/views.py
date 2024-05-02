@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.template.loader import render_to_string
+from .models import Scheme
 
 # Create your views here.
 
 
 def index(request):
-    return HttpResponse(render_to_string('beam_calculation.html'))
+    context = {'schemes': Scheme.objects.all()}
+    return render(request, 'beam_calculation.html', context=context)
