@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %} Создание нового проекта {% endblock %}
+{% block title %} {{title}} {% endblock %}
 {% block main %}
-    <h1>Создание нового проекта</h1>
+    <h1>{{title}}</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.name }}<br>
         {{ form.description }}<br>
         {{ form.date }}<br>
-        <button type="submit">Создать</button>
+        <button type="submit">Сохранить</button>
     </form>
 {% endblock %}

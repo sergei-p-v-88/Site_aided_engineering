@@ -20,5 +20,5 @@ def create(request):
             print("Ощибка заполнения формы")
 
     form = SchemeForm()
-    data = {'form': form}
+    data = {'form': form, 'title': 'создание нового проекта'}
     return render(request, 'beam/create.html', data)
