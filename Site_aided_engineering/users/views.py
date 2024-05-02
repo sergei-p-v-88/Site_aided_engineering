@@ -9,5 +9,5 @@ def index(request):
 
 
 def home(request):
-    context = {'schemes': Scheme.objects.all()}
+    context = {'schemes': Scheme.objects.order_by('date')}
     return render(request, 'users/home.html', context=context)

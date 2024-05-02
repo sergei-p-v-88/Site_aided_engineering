@@ -2,8 +2,14 @@
 {% block title %} Домашняя страница {% endblock %}
 {% block main %}
     <h1>Домашняя страница</h1>
-    <h2>Список проектов</h2>
-    {% for value in schemes %}
-    <a href="#"><p>{{ value }}</p></a>
-    {% endfor %}
+    <h2>Проекты</h2>
+    {% if schemes %}
+        <ul>
+        {% for scheme in schemes %}
+            <a href="#" title="{{scheme.description}}"><li>{{ scheme.name }}, {{ scheme.date }}</li></a>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Пусто</p>
+    {% endif %}
 {% endblock %}

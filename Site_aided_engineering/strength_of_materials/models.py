@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Scheme(models.Model):
     name = models.CharField('Название', max_length=80, blank=False)
     description = models.CharField('Описание', max_length=250, blank=True, default='')
-    date = models.DateTimeField('Дата публикации')
+    date = models.DateField('Дата публикации', blank=False)
 
     def __str__(self):
         return f'Название: {self.name}, дата: {self.date}'

@@ -2,5 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='beam'),
+    path('draw_scheme', views.draw_scheme, name='draw_scheme'),
+    path('create', views.create, name='create'),
 ]
