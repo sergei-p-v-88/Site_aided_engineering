@@ -6,7 +6,7 @@
         {% csrf_token %}
         {{ form.name }}<br>
         {{ form.description }}<br>
-        {{ form.date }}<br>
-        <button type="submit">Сохранить</button>
+        <span>{{ error }}</span>
+        <button type="submit">Создать</button>
     </form>
 {% endblock %}

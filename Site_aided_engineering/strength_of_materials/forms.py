@@ -5,7 +5,7 @@ from django.forms import ModelForm, TextInput, DateInput, Textarea
 class SchemeForm(ModelForm):
     class Meta:
         model = Scheme
-        fields = ['name', 'description', 'date']
+        fields = ['name', 'description']
 
         widgets = {
             'name': TextInput(attrs={
@@ -14,8 +14,4 @@ class SchemeForm(ModelForm):
             'description': Textarea(attrs={
                 'placeholder': 'Описание'
             }),
-            'date': DateInput(attrs={
-                'placeholder': 'Дата',
-                'type': 'date',
-            })
         }

@@ -6,11 +6,12 @@ from django.contrib.auth.models import User
 
 class Scheme(models.Model):
     name = models.CharField('Название', max_length=80, blank=False)
-    description = models.CharField('Описание', max_length=250, blank=True, default='')
-    date = models.DateField('Дата публикации', blank=False)
+    description = models.TextField('Описание', blank=True, default='')
+    time_create = models.DateTimeField('Дата публикации', auto_now_add=True)
+    time_update = models.DateTimeField('Дата изминения', auto_now=True)
 
     def __str__(self):
-        return f'Название: {self.name}, дата: {self.date}'
+        return f'Название: {self.name}, дата изминения: {self.time_update}'
 
 
     class Meta:

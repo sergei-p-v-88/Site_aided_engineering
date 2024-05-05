@@ -22,3 +22,18 @@ def create(request):
     form = SchemeForm()
     data = {'form': form, 'title': 'создание нового проекта'}
     return render(request, 'beam/create.html', data)
+
+
+def detail(request, scheme_id):
+    context = {'project': Scheme.objects.get(id=scheme_id)}
+    return render(request, 'beam/detail.html', context=context)
+
+
+def delete(request, scheme_id):
+    Scheme.objects.get(id=scheme_id).delete()
+    return redirect('home')
+    pass
+
+
+def update(request, scheme_id):
+    pass

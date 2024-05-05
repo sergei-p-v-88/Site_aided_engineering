@@ -9,16 +9,5 @@ def index(request):
 
 
 def home(request):
-    context = {'schemes': Scheme.objects.order_by('-date')}
+    context = {'schemes': Scheme.objects.order_by('-time_update')}
     return render(request, 'users/home.html', context=context)
-
-
-def detail(request, scheme_id):
-    context = {'project': Scheme.objects.get(id=scheme_id)}
-    return render(request, 'users/detail.html', context=context)
-
-
-def update(request, scheme_id):
-    context = {'project': Scheme.objects.get(id=scheme_id), 'title': 'редактирование проекта'}
-    return render(request, 'beam/create.html', context=context)
-
