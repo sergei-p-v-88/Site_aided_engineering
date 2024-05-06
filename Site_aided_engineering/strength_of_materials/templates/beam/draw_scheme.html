@@ -26,11 +26,16 @@
 			<button type ="button" id = "clear_scheme" class ="operations" title="Схема будет полностью очишена">Очистить</button>
 	</div>
 	<canvas id="calculated_scheme"></canvas>
+	<form method="post" >
+		{% csrf_token %}
+		<button type="submit" name="data" id="save">Сохранить</button>
+	</form>
 	<script type="text/javascript">
 
 		var model = new Model("calculated_scheme", 400, 400);
 		var controller = new Controller(model);
-
+		document.getElementById("save").value = model.elements;
 	</script>
+
 
 {% endblock %}
