@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}расчетная схема{% endblock %}
+{% block title %}расчетная схема: &quot{{project.name}}&quot{% endblock %}
 
 {% block script %}
 	<script src = "{% static 'js/main.js' %}" type="text/javascript"></script>
@@ -17,19 +17,20 @@
 {% endblock %}
 
 {% block main %}
-	{{ schemes }}
+	<h1>Расчетная схема проекта &quot{{ project.name }}&quot</h1>
 	<div>
 			<button type ="button" id = "Beam" class ="operations" title="Для создания балки выбирите 3 точки существующие или новые">Новая балка</button>
 			<button type ="button" id = "Hard_connection" class ="operations" title="Для создания заделки выбирите сущестующие осевую и точку">Жесткая заделка</button>
 			<button type ="button" id = "Size" class ="operations" title="Для создания размера выбирите существующие осевую и 2 точки и одну ">Линейный размер</button>
 			<button type ="button" id = "Force" class ="operations" title="Для создания силы выбирите существующую осевую и точку">Сила</button>
 			<button type ="button" id = "clear_scheme" class ="operations" title="Схема будет полностью очишена">Очистить</button>
-		</div>
-		<canvas id="calculated_scheme"></canvas>
-		<script type="text/javascript">
+	</div>
+	<canvas id="calculated_scheme"></canvas>
+	<script type="text/javascript">
 
-			var model = new Model("calculated_scheme", 400, 400);
-			var controller = new Controller(model);
+		var model = new Model("calculated_scheme", 400, 400);
+		var controller = new Controller(model);
 
-		</script>
+	</script>
+
 {% endblock %}

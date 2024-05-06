@@ -2,20 +2,15 @@ from django.shortcuts import render, redirect
 from .models import Scheme
 from .forms import SchemeForm
 
-# Create your views here.
-
-
-def draw_scheme(request):
-    context = {'schemes': Scheme.objects.all()}
-    return render(request, 'beam/draw_scheme.html', context=context)
-
 
 def create(request):
     if request.method == 'POST':
         form = SchemeForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('draw_scheme')
+            #print(form.cleaned_data)
+            project = Scheme.objects.create(name=form.cleaned_data['name'], description=form.cleaned_data['description'])
+            project.save()
+            return render(request, 'beam/draw_scheme.html', {'project': project})
         else:
             print("Ощибка заполнения формы")
 
@@ -32,8 +27,7 @@ def detail(request, scheme_id):
 def delete(request, scheme_id):
     Scheme.objects.get(id=scheme_id).delete()
     return redirect('home')
-    pass
 
 
 def update(request, scheme_id):
-    pass
+    return redirect('home')

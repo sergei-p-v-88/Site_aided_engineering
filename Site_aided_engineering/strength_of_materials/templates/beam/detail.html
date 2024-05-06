@@ -1,12 +1,37 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %} Проект:{{ project.name }} {% endblock %}
+
+{% block script %}
+	<script src = "{% static 'js/main.js' %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block style %}
+	<style type="text/css">
+		canvas {
+			border: solid;
+			border-radius: 5px;
+		}
+	</style>
+{% endblock %}
+
 {% block main %}
-    <h1>Проект: {{ project.name }}</h1>
+    <h1>Проект:</h1>
+    <p>{{ project.name }}</p>
     <h2>Описание:</h2>
     <p>{{ project.description }}</p>
-    <h2>Дата создания:</h2>
+    <h2>Схема</h2>
+    {{ project.data }}
+    <canvas id="calculated_scheme"></canvas>
+    <script type="text/javascript">
+
+		var model = new Model("calculated_scheme", 400, 400);
+		var controller = new Controller(model);
+
+	</script>
+    <h2>Создано:</h2>
     <p>{{ project.time_create  }}</p>
-    <h2>Дата изминения:</h2>
+    <h2>Изминено:</h2>
     <p>{{ project.time_update  }}</p>
     <a href="{% url 'delete' project.id %}">Удалить</a>
     <a href="{% url 'update' project.id %}">Редактировать</a>
