@@ -19,6 +19,10 @@ def create(request):
     return render(request, 'beam/create.html', data)
 
 
+def draw_scheme(request):
+    pass
+
+
 def detail(request, scheme_id):
     context = {'project': Scheme.objects.get(id=scheme_id)}
     return render(request, 'beam/detail.html', context=context)

@@ -316,7 +316,7 @@ class Worker_base{
                 //запускаем рабочего создающего элементы
                 WORKER = this.controller.workers['create'];
                 this.controller.create_element(e.target.id);
-                if (e.target.id == 'Hard_connection' || e.target.id == 'Size'){//типы для которых не нужно создавать новые точки
+                if (e.target.id == 'Hard_connection' || e.target.id == 'Size'){
                     WORKER.create_new_point = false;
                 }else{//типы для которых разрешено создавать новые точки
                     WORKER.create_new_point = true;
