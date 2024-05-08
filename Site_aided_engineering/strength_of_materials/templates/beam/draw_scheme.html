@@ -29,6 +29,7 @@
 	<canvas id="calculated_scheme"></canvas>
 	<div>
 		<a href="#" onclick="save()">Сохранить</a>
+		{% csrf_token %}
 		<a href="{% url 'home' %}">Домой</a>
 	</div>
 	<script type="text/javascript">
@@ -41,14 +42,15 @@
 
 			$.ajax({
 				type: "POST",
-				url: {% url 'create' %},
+				url: "{% url 'create' %}",
 				data: {
 					elements: model.elements,
 				},
 				success: function(response){
 					console.log("Обработка успешного ответа от сервера");
-				}
-				error: function(xhr, errmsg, err){
+				},
+
+				error: function(){
 					console.log("Обработка ощибок");
 				}
 			});

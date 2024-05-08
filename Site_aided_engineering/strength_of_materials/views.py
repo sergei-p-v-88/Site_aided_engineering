@@ -4,6 +4,7 @@ from .forms import SchemeForm
 
 
 def create(request):
+    print("Работает create")
     if request.method == 'POST':
         form = SchemeForm(request.POST)
         if form.is_valid():
@@ -15,6 +16,7 @@ def create(request):
             print("Ощибка заполнения формы")
 
         #нажатие на кнопку
+        print("Была нажата кнопка")
         elements = request.POST.get('elements')
         print(elements)
 
