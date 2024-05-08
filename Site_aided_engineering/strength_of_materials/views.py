@@ -14,6 +14,10 @@ def create(request):
         else:
             print("Ощибка заполнения формы")
 
+        #нажатие на кнопку
+        elements = request.POST.get('elements')
+        print(elements)
+
     form = SchemeForm()
     data = {'form': form, 'title': 'создание нового проекта'}
     return render(request, 'beam/create.html', data)

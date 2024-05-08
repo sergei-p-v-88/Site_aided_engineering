@@ -37,11 +37,23 @@
 		var controller = new Controller(model);
 
 		let save = function(){
+			console.log(model.elements)
+
 			$.ajax({
 				type: "POST",
-				url: {%  %}
+				url: {% url 'create' %},
+				data: {
+					elements: model.elements,
+				},
+				success: function(response){
+					console.log("Обработка успешного ответа от сервера");
+				}
+				error: function(xhr, errmsg, err){
+					console.log("Обработка ощибок");
+				}
 			});
 		}
+
 	</script>
 
 
