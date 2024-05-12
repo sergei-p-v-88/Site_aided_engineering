@@ -89,6 +89,7 @@ class Model{//класс схема
 		//данные
         this.elements = [];//элементы
         this.temp_obj = [];//временный объкт для создания
+        this.data = [];
 		//выбранные элементы
 		this.aim_element = null;//элемент на который наведен курсор
 		this.selected_element = null;//элемент на который выбран нажатием на клавишу
@@ -437,10 +438,14 @@ class Centerline{
     add_parent(model){
         console.log("Добавление родителя осевой /n модедь:" + model);
         let obj = model.selected_element;
+        if(obj != null && obj.constructor.name == 'Point'){
+            console.log("Добавление существующей точки")
+        }
         if (obj != null && obj.constructor.name != 'Point'){
             return;
         }
         if(obj == null){
+            console.log("Создание новой точки")
             obj = new Point();
             obj.set_coordinates(model.get_mouse_position());
         }
@@ -519,10 +524,14 @@ class Beam{
 
     add_parent(model){//метод добавления родителя
         let obj = model.selected_element;
-        if((obj != null && obj.constructor.name != 'Point') || (obj != null && obj.constructor.name != 'Centerline')){
-            return;
+        if(obj != null){
+            if (obj.constructor.name != 'Point' && obj.constructor.name != 'Centerline'){
+                console.log("Выход3" + obj.constructor.name);
+                return;
+            }
         }
         if (obj == null){
+            console.log("Создание новой точки")
             obj = new Point();
             obj.set_coordinates(model.get_mouse_position());
         }
@@ -530,9 +539,11 @@ class Beam{
             this.parents['Centerline'] = obj;
         }else if(obj.constructor.name == 'Point'){
             if (this.parents['Centerline'] == null){
+                console.log("Создание новой цент линии")
                 this.parents['Centerline'] = new Centerline();
                 this.parents['Centerline'].add_parent(model);
             }else if(this.parents['Centerline'] != null && !this.parents['Centerline'].isFull()){
+
                 this.parents['Centerline'].add_parent(model);
             }else if(this.parents['Point'] == null && this.parents['Centerline'].isFull()){
                 this.parents['Point'] = obj;

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Scheme
 from .forms import SchemeForm
+import json
 
 
 def create(request):
@@ -21,6 +22,11 @@ def create(request):
 
 def draw_scheme(request, scheme_id):
     context = {'project': Scheme.objects.get(id=scheme_id)}
+    if request.POST:
+        print("1")
+        elements = request.POST.get('elements')
+        print(elements)
+
     return render(request, 'beam/draw_scheme.html', context=context)
 
 

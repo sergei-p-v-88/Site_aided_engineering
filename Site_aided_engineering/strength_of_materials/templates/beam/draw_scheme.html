@@ -27,9 +27,9 @@
 			<button type ="button" id = "clear_scheme" class ="operations" title="Схема будет полностью очишена">Очистить</button>
 	</div>
 	<canvas id="calculated_scheme"></canvas>
+
 	<div>
-		<a href="#" onclick="save()">Сохранить</a>
-		{% csrf_token %}
+		<a href="#" onclick="submit_form()">Сохранить</a>
 		<a href="{% url 'home' %}">Домой</a>
 	</div>
 	<script type="text/javascript">
@@ -37,24 +37,22 @@
 		var model = new Model("calculated_scheme", 400, 400);
 		var controller = new Controller(model);
 
-		let save = function(){
-			console.log(model.elements)
 
+		function submit_form(){
 			$.ajax({
-				type: "POST",
-				url: "{% url 'create' %}",
-				data: {
-					elements: model.elements,
-				},
-				success: function(response){
-					console.log("Обработка успешного ответа от сервера");
-				},
-
-				error: function(){
-					console.log("Обработка ощибок");
-				}
-			});
+			   	type: 'POST',
+			   	data: JSON.stringify(model.elements),
+			   	contentType: 'application/json',
+			   	url: "{% url 'draw_scheme' project.id %}",
+			  	headers: {
+				   'X-CSRFToken': '{{ csrf_token }}'
+			   },
+			   success: function(j) {
+					console.log("Хня")
+			   }
+		   })
 		}
+
 	</script>
 
 
