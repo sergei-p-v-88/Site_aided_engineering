@@ -96,6 +96,12 @@ class Model{//класс схема
 		this.rectangular_drawing = false;//прямоугольное черчение
 	}
 
+    get_data(){
+        let data = []
+
+        return
+    }
+
     set_color(obj){//установка цветов при рисовании
         if(obj == this.selected_element){//элемент выбран шелчком мышки
             return style_canvas.colors[3];
