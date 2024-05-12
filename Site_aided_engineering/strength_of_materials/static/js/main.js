@@ -92,7 +92,7 @@ class Model{//класс схема
 		//выбранные элементы
 		this.aim_element = null;//элемент на который наведен курсор
 		this.selected_element = null;//элемент на который выбран нажатием на клавишу
-		this.rectangular_drawing = true;//прямоугольное черчение
+		this.rectangular_drawing = false;//прямоугольное черчение
 	}
 
     set_color(obj){//установка цветов при рисовании
