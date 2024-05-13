@@ -98,37 +98,24 @@ class Model{//класс схема
     get_data(){//получение элементов в виде списка
         let data = []
         for (let i = 0; i < this.elements.length; i++){
-            if (this.elements[i].constructor.name != 'Point'){
-                let element = this.elements[i].get_data();
-                element["name"] = this.elements[i].constructor.name;
-                data.push(element)
-            }
+            console.log("тип: "+this.elements[i].constructor.name)
+            let element = this.elements[i].get_data();
+            element["name"] = this.elements[i].constructor.name;
+            data.push(element)
         }
         return data
     }
 
     set_data(data){
         console.log("Функция добавление данных")
+        console.log(data);
         for (let i = 0; i < data.length; i++){
-            console.log("i: " + i)
-            let obj = this.create_element(data[i]['name']);
-            for (const [key, value] of Object.entries(data[i])){
-                console.log("key: " + key + ", value: " + value);
-                let type = key;
-                if (type == 'Start_point' || type == 'End_point'){
-                    type = 'Point'
-                }
-                console.log("создание элемента типа" + type)
-                let parent = this.create_element(type)
-                if(key != 'name'){
-                    obj.parents[key] = parent;
-                }
-
-
+            //console.log("i: " + i)
+            if(data[i]['name'] == 'Point'){
+                let obj = new Point();
+                obj.set_coordinates([data[i]['x'], data[i]['y']])
+                this.add(obj);
             }
-            this.add(obj);
-            //убрать нужно использовать метод add
-            //this.elements.push(obj);
         }
         return;
     }
