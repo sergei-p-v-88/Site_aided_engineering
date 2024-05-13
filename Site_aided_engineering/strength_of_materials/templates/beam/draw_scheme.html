@@ -29,8 +29,8 @@
 	<canvas id="calculated_scheme"></canvas>
 	<form method="post" action="{% url 'draw_scheme' project.id %}">
 		{% csrf_token %}
-		<input name = "elements" id="input_elements" type="hidden">
-		<input type="submit" value="Сохранить" />
+		<input name = "elements" id="input_elements"  type="hidden" >
+		<input type="submit" value="Сохранить" onclick="save_data()">
 	</form>
 
 	<div>
@@ -44,22 +44,11 @@
 
 		var input_element = document.getElementById('input_elements')
 
-		let data = [
-					{
-					'name': 'Beam',
-					'start_point': {'x': 10, 'y': 20},
-					'end_point': {'x': 30, 'y': 20},
-					'point': {'x': 30, 'y': 20}
-					},
-					{
-					'name': 'Beam',
-					'start_point': {'x': 30, 'y': 20},
-					'end_point': {'x': 600, 'y': 20},
-					'point': {'x': 80, 'y': 20}
-					}
-				]
+		function save_data(){
+			alert("Сохраняем дату: " + model.get_data());
+			input_element.value = JSON.stringify(model.get_data());
+		}
 
-		input_element.value = JSON.stringify(data)
 	</script>
 
 

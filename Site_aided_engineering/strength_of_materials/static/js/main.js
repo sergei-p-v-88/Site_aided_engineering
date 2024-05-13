@@ -89,7 +89,6 @@ class Model{//класс схема
 		//данные
         this.elements = [];//элементы
         this.temp_obj = [];//временный объкт для создания
-        this.data = [];
 		//выбранные элементы
 		this.aim_element = null;//элемент на который наведен курсор
 		this.selected_element = null;//элемент на который выбран нажатием на клавишу
@@ -97,9 +96,16 @@ class Model{//класс схема
 	}
 
     get_data(){
+        console.log("Работает метод получения даты")
         let data = []
-
-        return
+        for (let i = 0; i < this.elements.length; i++){
+            if (this.elements[i].constructor.name != 'Point'){
+                let element = this.elements[i].get_data();
+                element['name'] = this.elements[i].constructor.name;
+                data.push(element)
+            }
+        }
+        return data
     }
 
     set_color(obj){//установка цветов при рисовании
@@ -301,6 +307,7 @@ class Worker_base{
     //отслеживание кликов
     click(e){
         console.log(this.model);
+        console.log(this.model.get_data());
         //console.log(e.target.id);
         console.log("Рабочий: " + WORKER.constructor.name);
         this.model.draw_field();
@@ -389,6 +396,9 @@ class Point{//класс точка
         COUNTER += 1;
         this.number = COUNTER;
 	}
+    get_data(){
+        return {'x': this.x, 'y': this.y}
+    }
 
     set_coordinates(x_y){
         this.x = x_y[0];
@@ -439,6 +449,13 @@ class Centerline{
 
         COUNTER += 1;
         this.number = COUNTER;
+    }
+
+    get_data(){
+        let data = {};
+        data['Start_point'] = this.parents['Start_point'].get_data();
+        data['End_point'] = this.parents['End_point'].get_data();
+        return data;
     }
 
     add_parent(model){
@@ -526,6 +543,13 @@ class Beam{
         COUNTER += 1;
         this.number = COUNTER;
         this.draw_points = [new Point(), new Point(), new Point(), new Point()];
+    }
+
+    get_data(){
+        let data = {};
+        data['Centerline'] = this.parents['Centerline'].get_data();
+        data['Point'] = this.parents['Point'].get_data();
+        return data;
     }
 
     add_parent(model){//метод добавления родителя
@@ -617,6 +641,13 @@ class Hard_connection{
         this.draw_points = [new Point(), new Point()];
     }
 
+    get_data(){
+        let data = {};
+        data['Centerline'] = this.parents['Centerline'].get_data();
+        data['Point'] = this.parents['Point'].get_data();
+        return data;
+    }
+
     add_parent(model){//метод добавления родителя
         let obj = model.selected_element;
         if (obj != null){
@@ -690,6 +721,15 @@ class Size{
         COUNTER += 1;
         this.number = COUNTER;
         this.draw_points = [new Point(), new Point(), new Point()];
+    }
+
+    get_data(){
+        let data = {};
+        data['Centerline'] = this.parents['Centerline'].get_data();
+        data['Start_point'] = this.parents['Start_point'].get_data();
+        data['End_point'] = this.parents['End_point'].get_data();
+        data['Point'] = this.parents['Point'].get_data();
+        return data;
     }
 
     add_parent(model){//метод добавления родителя
@@ -772,6 +812,14 @@ class Force{
         COUNTER += 1;
         this.number = COUNTER;
         this.draw_points = [];
+    }
+
+    get_data(){
+        let data = {};
+        data['Centerline'] = this.parents['Centerline'].get_data();
+        data['Start_point'] = this.parents['Start_point'].get_data();
+        data['End_point'] = this.parents['End_point'].get_data();
+        return data;
     }
 
     add_parent(model){//метод добавления родителя
