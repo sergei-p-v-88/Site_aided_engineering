@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from .models import Scheme
 from .forms import SchemeForm
+from django.http import JsonResponse
 import json
 
 
 def create(request):
-    print("Работает create")
     if request.method == 'POST':
         form = SchemeForm(request.POST)
         if form.is_valid():
@@ -21,11 +21,15 @@ def create(request):
 
 
 def draw_scheme(request, scheme_id):
+    scheme = Scheme.objects.get(id=scheme_id)
     context = {'project': Scheme.objects.get(id=scheme_id)}
-    if request.POST:
+    if request.method == 'POST':
         print("1")
         elements = request.POST.get('elements')
         print(elements)
+        scheme.data = elements
+        scheme.save()
+
 
     return render(request, 'beam/draw_scheme.html', context=context)
 

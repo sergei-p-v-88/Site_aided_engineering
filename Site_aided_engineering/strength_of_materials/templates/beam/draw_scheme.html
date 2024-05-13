@@ -6,7 +6,6 @@
 {% block script %}
 	<script src = "{% static 'js/main.js' %}" type="text/javascript"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-	<script src="build/circular-json.js"></script>
 {% endblock %}
 
 {% block style %}
@@ -28,9 +27,13 @@
 			<button type ="button" id = "clear_scheme" class ="operations" title="Схема будет полностью очишена">Очистить</button>
 	</div>
 	<canvas id="calculated_scheme"></canvas>
+	<form method="post" action="{% url 'draw_scheme' project.id %}">
+		{% csrf_token %}
+		<input name = "elements" id="input_elements" type="hidden">
+		<input type="submit" value="Сохранить" />
+	</form>
 
 	<div>
-		<a href="#" onclick="submit_form()">Сохранить</a>
 		<a href="{% url 'home' %}">Домой</a>
 	</div>
 
@@ -39,27 +42,24 @@
 		var model = new Model("calculated_scheme", 400, 400);
 		var controller = new Controller(model);
 
+		var input_element = document.getElementById('input_elements')
 
+		let data = [
+					{
+					'name': 'Beam',
+					'start_point': {'x': 10, 'y': 20},
+					'end_point': {'x': 30, 'y': 20},
+					'point': {'x': 30, 'y': 20}
+					},
+					{
+					'name': 'Beam',
+					'start_point': {'x': 30, 'y': 20},
+					'end_point': {'x': 600, 'y': 20},
+					'point': {'x': 80, 'y': 20}
+					}
+				]
 
-		function submit_form(){
-			console.log("Сериализация:" + JSON.stringify(model.elements));
-
-			/*
-			$.ajax({
-			   	type: 'POST',
-			   	data: JSON.stringify(model.elements),
-			   	contentType: 'application/json',
-			   	url: "{% url 'draw_scheme' project.id %}",
-			  	headers: {
-				   'X-CSRFToken': '{{ csrf_token }}'
-			   },
-			   success: function(j) {
-					console.log("Хня")
-			   }
-		   })*/
-
-		}
-
+		input_element.value = JSON.stringify(data)
 	</script>
 
 
