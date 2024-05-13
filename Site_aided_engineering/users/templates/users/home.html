@@ -6,7 +6,7 @@
     {% if schemes %}
         <ul>
         {% for scheme in schemes %}
-            <a href="{% url 'detail' scheme.id %}" title="{{ scheme.id }}"><li>{{ scheme.name }}, {{ scheme.time_update }}</li></a>
+            <a href="{% url 'detail' scheme.id %}" title="{{ scheme.name }}"><li>{{ scheme.name }}, {{ scheme.time_update }}</li></a>
         {% endfor %}
         </ul>
     {% else %}

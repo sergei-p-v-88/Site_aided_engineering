@@ -27,20 +27,21 @@
 			<button type ="button" id = "clear_scheme" class ="operations" title="Схема будет полностью очишена">Очистить</button>
 	</div>
 	<canvas id="calculated_scheme"></canvas>
-	<div>
-		<a href="#" onclick="save()">Сохранить</a>
-		<a href="{% url 'home' %}">Домой</a>
-	</div>
+	<form method="post" action="{% url 'draw_scheme' project.id %}" id="save_data">
+		{% csrf_token %}
+		<input name = "elements" id="input_elements"  type="hidden" >
+		<input type="submit" value="Сохранить и выйти" onclick="save_data()">
+	</form>
+
 	<script type="text/javascript">
 
 		var model = new Model("calculated_scheme", 400, 400);
 		var controller = new Controller(model);
 
-		let save = function(){
-			$.ajax({
-				type: "POST",
-				url: {%  %}
-			});
+		var input_element = document.getElementById('input_elements')
+
+		function save_data(){
+			input_element.value = JSON.stringify(model.get_data());
 		}
 	</script>
 
