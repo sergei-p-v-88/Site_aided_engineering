@@ -27,7 +27,7 @@ def draw_scheme(request, scheme_id):
         print("1")
         elements = request.POST.get('elements')
         elements = json.loads(elements)
-        print(elements, type(elements))
+        print(elements[0], type(elements[0]))
 
         scheme.data = elements
         scheme.save()

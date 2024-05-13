@@ -25,34 +25,11 @@
     <canvas id="calculated_scheme"></canvas>
     <script type="text/javascript">
 
+        var data = {{ project.data|safe }};
 
-        var data2 = '[{"Start_point": {"x": 20, "y": 32}, "End_point": {"x": 20, "y": 32}, "name": "Centerline"}, {"Start_point": {"x": 20, "y": 32}, "End_point": {"x": 20, "y": 32}, "name": "Centerline"}]'
-        data2 = "[{'Start_point': {'x': 20, 'y': 32}, 'End_point': {'x': 20, 'y': 32}, 'name': 'Centerline'}, {'Start_point': {'x': 20, 'y': 32}, 'End_point': {'x': 20, 'y': 32}, 'name': 'Centerline'}]"
-        console.log(data2)
-        data2 = data2.toString();
-
-
-
-        var data = "{{ project.data|safe }}";
-        for(let i = 0; i < data2.length; i++){
-            console.log(data2[i]);
-            if(data2[i] == "'"){
-
-            }
+        for(let i = 0; i < data.length; i++){
+            console.log(data[i]);
         }
-        data2 = JSON.parse(data2)
-        /*
-        console.log(data2)
-
-
-        console.log("полученная дата: " + data)
-
-
-        data = JSON.parse(data)
-        console.log(data + "длина: " + data.length)
-        for (let i = 0; i < data.length; i++){
-            console.log(data[i])
-        }*/
 
 		var model = new Model("calculated_scheme", 400, 400);
 		var controller = new Controller(model);

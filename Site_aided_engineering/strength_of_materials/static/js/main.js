@@ -95,8 +95,7 @@ class Model{//класс схема
 		this.rectangular_drawing = false;//прямоугольное черчение
 	}
 
-    get_data(){
-        console.log("Работает метод получения даты")
+    get_data(){//получение элементов в виде списка
         let data = []
         for (let i = 0; i < this.elements.length; i++){
             if (this.elements[i].constructor.name != 'Point'){
@@ -106,6 +105,10 @@ class Model{//класс схема
             }
         }
         return data
+    }
+
+    set_data(data){
+        return;
     }
 
     set_color(obj){//установка цветов при рисовании
@@ -222,6 +225,7 @@ class Model{//класс схема
     }
 
     create_element(type){
+
         if (type == 'Centerline'){
             this.temp_obj.push(new Centerline());
         }else if(type == 'Beam'){
