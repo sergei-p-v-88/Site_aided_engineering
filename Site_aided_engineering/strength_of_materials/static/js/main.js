@@ -108,6 +108,28 @@ class Model{//класс схема
     }
 
     set_data(data){
+        console.log("Функция добавление данных")
+        for (let i = 0; i < data.length; i++){
+            console.log("i: " + i)
+            let obj = this.create_element(data[i]['name']);
+            for (const [key, value] of Object.entries(data[i])){
+                console.log("key: " + key + ", value: " + value);
+                let type = key;
+                if (type == 'Start_point' || type == 'End_point'){
+                    type = 'Point'
+                }
+                console.log("создание элемента типа" + type)
+                let parent = this.create_element(type)
+                if(key != 'name'){
+                    obj.parents[key] = parent;
+                }
+
+
+            }
+            this.add(obj);
+            //убрать нужно использовать метод add
+            //this.elements.push(obj);
+        }
         return;
     }
 
@@ -225,20 +247,19 @@ class Model{//класс схема
     }
 
     create_element(type){
-
+        let obj = new Point()
         if (type == 'Centerline'){
-            this.temp_obj.push(new Centerline());
+            obj = new Centerline();
         }else if(type == 'Beam'){
-            this.temp_obj.push(new Beam());
+            obj = new Beam();
         }else if(type == 'Hard_connection'){
-            this.temp_obj.push(new Hard_connection());
+            obj = new Hard_connection();
         }else if(type == 'Size'){
-            this.temp_obj.push(new Size());
+            obj = new Size();
         }else if(type == 'Force'){
-            this.temp_obj.push(new Force());
-        }else{
-            this.temp_obj.push(new Point());
+            obj = new Force();
         }
+        return obj;
     }
 }
 
@@ -298,7 +319,7 @@ class Controller{
     }
 
     create_element(type){
-        this.model.create_element(type);
+        this.model.temp_obj.push(this.model.create_element(type));
     }
 }
 
@@ -311,7 +332,6 @@ class Worker_base{
     //отслеживание кликов
     click(e){
         console.log(this.model);
-        console.log(this.model.get_data());
         //console.log(e.target.id);
         console.log("Рабочий: " + WORKER.constructor.name);
         this.model.draw_field();
@@ -560,12 +580,11 @@ class Beam{
         let obj = model.selected_element;
         if(obj != null){
             if (obj.constructor.name != 'Point' && obj.constructor.name != 'Centerline'){
-                console.log("Выход3" + obj.constructor.name);
                 return;
             }
         }
         if (obj == null){
-            console.log("Создание новой точки")
+            //console.log("Создание новой точки")
             obj = new Point();
             obj.set_coordinates(model.get_mouse_position());
         }
@@ -573,7 +592,7 @@ class Beam{
             this.parents['Centerline'] = obj;
         }else if(obj.constructor.name == 'Point'){
             if (this.parents['Centerline'] == null){
-                console.log("Создание новой цент линии")
+                //console.log("Создание новой цент линии")
                 this.parents['Centerline'] = new Centerline();
                 this.parents['Centerline'].add_parent(model);
             }else if(this.parents['Centerline'] != null && !this.parents['Centerline'].isFull()){
@@ -829,11 +848,11 @@ class Force{
     add_parent(model){//метод добавления родителя
         let obj = model.selected_element;
         if(obj != null){
-            console.log("Объект не нуливой");
+            //console.log("Объект не нуливой");
             if(obj.constructor.name == 'Centerline'){
-                console.log("Объект осевая");
+                //console.log("Объект осевая");
                 if(this.parents['Centerline'] == null){
-                    console.log("Определяем осевую")
+                    //console.log("Определяем осевую")
                     this.parents['Centerline'] = obj;
                     console.log("Осевая: " + this.parents['Centerline']);
                 }else{
