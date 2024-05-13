@@ -27,15 +27,11 @@
 			<button type ="button" id = "clear_scheme" class ="operations" title="Схема будет полностью очишена">Очистить</button>
 	</div>
 	<canvas id="calculated_scheme"></canvas>
-	<form method="post" action="{% url 'draw_scheme' project.id %}">
+	<form method="post" action="{% url 'draw_scheme' project.id %}" id="save_data">
 		{% csrf_token %}
 		<input name = "elements" id="input_elements"  type="hidden" >
-		<input type="submit" value="Сохранить" onclick="save_data()">
+		<input type="submit" value="Сохранить и выйти" onclick="save_data()">
 	</form>
-
-	<div>
-		<a href="{% url 'home' %}">Домой</a>
-	</div>
 
 	<script type="text/javascript">
 
@@ -45,10 +41,8 @@
 		var input_element = document.getElementById('input_elements')
 
 		function save_data(){
-			alert("Сохраняем дату: " + model.get_data());
 			input_element.value = JSON.stringify(model.get_data());
 		}
-
 	</script>
 
 

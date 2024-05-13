@@ -101,7 +101,7 @@ class Model{//класс схема
         for (let i = 0; i < this.elements.length; i++){
             if (this.elements[i].constructor.name != 'Point'){
                 let element = this.elements[i].get_data();
-                element['name'] = this.elements[i].constructor.name;
+                element["name"] = this.elements[i].constructor.name;
                 data.push(element)
             }
         }
@@ -397,7 +397,7 @@ class Point{//класс точка
         this.number = COUNTER;
 	}
     get_data(){
-        return {'x': this.x, 'y': this.y}
+        return {"x": this.x, "y": this.y}
     }
 
     set_coordinates(x_y){
@@ -453,8 +453,8 @@ class Centerline{
 
     get_data(){
         let data = {};
-        data['Start_point'] = this.parents['Start_point'].get_data();
-        data['End_point'] = this.parents['End_point'].get_data();
+        data["Start_point"] = this.parents["Start_point"].get_data();
+        data["End_point"] = this.parents["End_point"].get_data();
         return data;
     }
 
@@ -547,8 +547,8 @@ class Beam{
 
     get_data(){
         let data = {};
-        data['Centerline'] = this.parents['Centerline'].get_data();
-        data['Point'] = this.parents['Point'].get_data();
+        data["Centerline"] = this.parents['Centerline'].get_data();
+        data["Point"] = this.parents['Point'].get_data();
         return data;
     }
 
@@ -643,8 +643,8 @@ class Hard_connection{
 
     get_data(){
         let data = {};
-        data['Centerline'] = this.parents['Centerline'].get_data();
-        data['Point'] = this.parents['Point'].get_data();
+        data["Centerline"] = this.parents['Centerline'].get_data();
+        data["Point"] = this.parents['Point'].get_data();
         return data;
     }
 
@@ -725,10 +725,10 @@ class Size{
 
     get_data(){
         let data = {};
-        data['Centerline'] = this.parents['Centerline'].get_data();
-        data['Start_point'] = this.parents['Start_point'].get_data();
-        data['End_point'] = this.parents['End_point'].get_data();
-        data['Point'] = this.parents['Point'].get_data();
+        data["Centerline"] = this.parents['Centerline'].get_data();
+        data["Start_point"] = this.parents['Start_point'].get_data();
+        data["End_point"] = this.parents['End_point'].get_data();
+        data["Point"] = this.parents['Point'].get_data();
         return data;
     }
 
@@ -816,9 +816,9 @@ class Force{
 
     get_data(){
         let data = {};
-        data['Centerline'] = this.parents['Centerline'].get_data();
-        data['Start_point'] = this.parents['Start_point'].get_data();
-        data['End_point'] = this.parents['End_point'].get_data();
+        data["Centerline"] = this.parents['Centerline'].get_data();
+        data["Start_point"] = this.parents['Start_point'].get_data();
+        data["End_point"] = this.parents['End_point'].get_data();
         return data;
     }
 

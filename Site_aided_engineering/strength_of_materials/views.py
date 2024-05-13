@@ -26,15 +26,18 @@ def draw_scheme(request, scheme_id):
     if request.method == 'POST':
         print("1")
         elements = request.POST.get('elements')
-        print(elements)
+        elements = json.loads(elements)
+        print(elements, type(elements))
+
         scheme.data = elements
         scheme.save()
-
-
+        return redirect('home')
     return render(request, 'beam/draw_scheme.html', context=context)
 
 
 def detail(request, scheme_id):
+    project = Scheme.objects.get(id=scheme_id)
+    print(type(project.data))
     context = {'project': Scheme.objects.get(id=scheme_id)}
     return render(request, 'beam/detail.html', context=context)
 
