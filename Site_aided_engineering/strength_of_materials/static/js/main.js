@@ -98,26 +98,84 @@ class Model{//класс схема
     get_data(){//получение элементов в виде списка
         let data = []
         for (let i = 0; i < this.elements.length; i++){
-            console.log("тип: "+this.elements[i].constructor.name)
-            let element = this.elements[i].get_data();
-            element["name"] = this.elements[i].constructor.name;
-            data.push(element)
+            if(this.elements[i].constructor.name != 'Point'){
+                console.log("тип: " + this.elements[i].constructor.name)
+                let element = this.elements[i].get_data();
+                element["name"] = this.elements[i].constructor.name;
+                data.push(element)
+            }
         }
         return data
+    }
+
+    includes_obj(data_obj){//если объекта представленный датой в элементах
+        for(let j = 0; j < this.elements.length; j++){
+            console.log(data_obj);
+            console.log("?=");
+            console.log(this.elements[j].get_data());
+
+            console.log(this.compare(this.elements[j], data_obj))
+
+            if(this.compare(this.elements[j], data_obj)){
+                return true;
+                }
+        }
+        return false;
+    }
+
+    compare(obj, data){//сравнить объект с со словарем
+        let data_obj = obj.get_data();
+        for (const [key, value] of Object.entries(data_obj)){
+            console.log(data[key])
+            console.log("?=");
+            console.log(data_obj[key])
+
+            if(data[key] != data_obj[key]){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    set_parents(obj, parents){
+        console.log("Работает установка родителей")
+        for (let i = 0; i < parents.length; i++){
+            if(this.includes_obj(parents[i])){
+                console.log("Такой элемент уже есть")
+                obj.parents[parents[i]['name']] = this.elements[j];//востанавливаем связи родителей
+            }else{
+                console.log("Такого элемента еще нет")
+                let new_obj = this.create_element(parents[i]['type']);//такого элемета еще нет
+                obj.parents[parents[i]['name']] = new_obj;
+                if('data' in parents[i]){
+                    console.log("Добавление даты для " + new_obj.constructor.name)
+                    new_obj.set_data(parents[i]['data']);
+                }
+                this.set_parents(new_obj, parents[i]['parents']);//настраиваем родителей для нового объекта
+            }
+        }
     }
 
     set_data(data){
         console.log("Функция добавление данных")
         console.log(data);
-        for (let i = 0; i < data.length; i++){
-            //console.log("i: " + i)
-            if(data[i]['name'] == 'Point'){
-                let obj = new Point();
-                obj.set_coordinates([data[i]['x'], data[i]['y']])
+        for (let i = 0; i < data.length; i++){//пребираем объекты из полученной даты
+            console.log(data[i]);
+            if(this.includes_obj(data[i])){
+                console.log("Такой элемет уже есть!")
+            }else{
+                console.log("Такого элемента еще нет")
+                let obj = this.create_element(data[i]['type']);
+                if('data' in data[i]){
+                    console.log("Добавление даты для " + obj.constructor.name)
+                    console.log("дата: " + data[i]['data'] )
+                    obj.set_data(data[i]['data']);
+                }
+                this.set_parents(obj, data[i]['parents'])
                 this.add(obj);
             }
         }
-        return;
+        console.log(this.elements);
     }
 
     set_color(obj){//установка цветов при рисовании
@@ -152,7 +210,6 @@ class Model{//класс схема
             }else{
                 this.elements.unshift(obj);
             }
-
         }
         for (const [key, value] of Object.entries(obj.parents)){
             if(obj.parents[key].children.indexOf(obj) == -1){//если этого объекта еще там нет
@@ -407,8 +464,14 @@ class Point{//класс точка
         COUNTER += 1;
         this.number = COUNTER;
 	}
+
     get_data(){
-        return {"x": this.x, "y": this.y}
+        return {'type': this.constructor.name, 'data':{"x": this.x, "y": this.y}, 'parents': []};
+    }
+
+    set_data(data){
+        this.x = data['x'];
+        this.y = data['y'];
     }
 
     set_coordinates(x_y){
@@ -463,9 +526,13 @@ class Centerline{
     }
 
     get_data(){
-        let data = {};
-        data["Start_point"] = this.parents["Start_point"].get_data();
-        data["End_point"] = this.parents["End_point"].get_data();
+        let data = {'type': this.constructor.name};
+        data['parents'] = [];
+        for (const [key, value] of Object.entries(this.parents)){
+            let parent = value.get_data();
+            parent['name'] = key;
+            data['parents'].push(parent);
+        }
         return data;
     }
 
@@ -473,13 +540,13 @@ class Centerline{
         console.log("Добавление родителя осевой /n модедь:" + model);
         let obj = model.selected_element;
         if(obj != null && obj.constructor.name == 'Point'){
-            console.log("Добавление существующей точки")
+            //console.log("Добавление существующей точки")
         }
         if (obj != null && obj.constructor.name != 'Point'){
             return;
         }
         if(obj == null){
-            console.log("Создание новой точки")
+            //console.log("Создание новой точки")
             obj = new Point();
             obj.set_coordinates(model.get_mouse_position());
         }
@@ -557,9 +624,13 @@ class Beam{
     }
 
     get_data(){
-        let data = {};
-        data["Centerline"] = this.parents['Centerline'].get_data();
-        data["Point"] = this.parents['Point'].get_data();
+        let data = {'type': this.constructor.name};
+        data['parents'] = [];
+        for (const [key, value] of Object.entries(this.parents)){
+            let parent = value.get_data();
+            parent['name'] = key;
+            data['parents'].push(parent);
+        }
         return data;
     }
 
@@ -652,9 +723,13 @@ class Hard_connection{
     }
 
     get_data(){
-        let data = {};
-        data["Centerline"] = this.parents['Centerline'].get_data();
-        data["Point"] = this.parents['Point'].get_data();
+        let data = {'type': this.constructor.name};
+        data['parents'] = [];
+        for (const [key, value] of Object.entries(this.parents)){
+            let parent = value.get_data();
+            parent['name'] = key;
+            data['parents'].push(parent);
+        }
         return data;
     }
 
@@ -734,11 +809,13 @@ class Size{
     }
 
     get_data(){
-        let data = {};
-        data["Centerline"] = this.parents['Centerline'].get_data();
-        data["Start_point"] = this.parents['Start_point'].get_data();
-        data["End_point"] = this.parents['End_point'].get_data();
-        data["Point"] = this.parents['Point'].get_data();
+        let data = {'type': this.constructor.name};
+        data['parents'] = [];
+        for (const [key, value] of Object.entries(this.parents)){
+            let parent = value.get_data();
+            parent['name'] = key;
+            data['parents'].push(parent);
+        }
         return data;
     }
 
@@ -825,11 +902,18 @@ class Force{
     }
 
     get_data(){
-        let data = {};
-        data["Centerline"] = this.parents['Centerline'].get_data();
-        data["Start_point"] = this.parents['Start_point'].get_data();
-        data["End_point"] = this.parents['End_point'].get_data();
+        let data = {'type': this.constructor.name, 'data': this.value};
+        data['parents'] = [];
+        for (const [key, value] of Object.entries(this.parents)){
+            let parent = value.get_data();
+            parent['name'] = key;
+            data['parents'].push(parent);
+        }
         return data;
+    }
+
+    set_data(data){
+        this.value = data;
     }
 
     add_parent(model){//метод добавления родителя
