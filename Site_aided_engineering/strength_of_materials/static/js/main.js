@@ -98,60 +98,44 @@ class Model{//класс схема
     get_data(){//получение элементов в виде списка
         let data = []
         for (let i = 0; i < this.elements.length; i++){
-            if(this.elements[i].constructor.name != 'Point'){
-                console.log("тип: " + this.elements[i].constructor.name)
-                let element = this.elements[i].get_data();
-                element["name"] = this.elements[i].constructor.name;
-                data.push(element)
-            }
+            console.log("тип: " + this.elements[i].constructor.name)
+            let element = this.elements[i].get_data();
+            element["name"] = this.elements[i].constructor.name;
+            data.push(element)
         }
         return data
     }
 
-    includes_obj(data_obj){//если объекта представленный датой в элементах
-        for(let j = 0; j < this.elements.length; j++){
-            console.log(data_obj);
-            console.log("?=");
-            console.log(this.elements[j].get_data());
+    set_obj(obj, index_obj, data){
+        console.log(obj.constructor.name)
+        console.log(data[index_obj]['parents'])
 
-            console.log(this.compare(this.elements[j], data_obj))
-
-            if(this.compare(this.elements[j], data_obj)){
-                return true;
-                }
+        if('data' in data[index_obj]){
+            obj.set_data(data[index_obj]['data']);
         }
-        return false;
-    }
-
-    compare(obj, data){//сравнить объект с со словарем
-        let data_obj = obj.get_data();
-        for (const [key, value] of Object.entries(data_obj)){
-            console.log(data[key])
-            console.log("?=");
-            console.log(data_obj[key])
-
-            if(data[key] != data_obj[key]){
-                return false;
+        //радители объекта
+        for (let i = 0; i < data[index_obj]['parents'].length; i++){
+            //console.log(i + " родитель")
+            let dict_obj = {}
+            Object.assign(dict_obj, data[index_obj]['parents'][i]);
+            if('name' in dict_obj){
+                delete dict_obj['name']
             }
-        }
-        return true;
-    }
-
-    set_parents(obj, parents){
-        console.log("Работает установка родителей")
-        for (let i = 0; i < parents.length; i++){
-            if(this.includes_obj(parents[i])){
-                console.log("Такой элемент уже есть")
-                obj.parents[parents[i]['name']] = this.elements[j];//востанавливаем связи родителей
-            }else{
-                console.log("Такого элемента еще нет")
-                let new_obj = this.create_element(parents[i]['type']);//такого элемета еще нет
-                obj.parents[parents[i]['name']] = new_obj;
-                if('data' in parents[i]){
-                    console.log("Добавление даты для " + new_obj.constructor.name)
-                    new_obj.set_data(parents[i]['data']);
+            //console.log(dict_obj);
+            for(let j = 0; j < data.length; j++){
+                let dict_temp = {};
+                Object.assign(dict_temp, data[j]);
+                if('name' in dict_temp){
+                    delete dict_temp['name']
                 }
-                this.set_parents(new_obj, parents[i]['parents']);//настраиваем родителей для нового объекта
+                //console.log(j + "data")
+                //console.log(dict_temp);
+                //console.log(JSON.stringify(dict_obj) === JSON.stringify(dict_temp));
+                if(JSON.stringify(dict_obj) === JSON.stringify(dict_temp)){
+                    console.log("ключ родителя")
+                    console.log(data[index_obj]['parents'][i]['name'])
+                    obj.parents[data[index_obj]['parents'][i]['name']] = this.temp_obj[j];
+                }
             }
         }
     }
@@ -159,23 +143,15 @@ class Model{//класс схема
     set_data(data){
         console.log("Функция добавление данных")
         console.log(data);
-        for (let i = 0; i < data.length; i++){//пребираем объекты из полученной даты
-            console.log(data[i]);
-            if(this.includes_obj(data[i])){
-                console.log("Такой элемет уже есть!")
-            }else{
-                console.log("Такого элемента еще нет")
-                let obj = this.create_element(data[i]['type']);
-                if('data' in data[i]){
-                    console.log("Добавление даты для " + obj.constructor.name)
-                    console.log("дата: " + data[i]['data'] )
-                    obj.set_data(data[i]['data']);
-                }
-                this.set_parents(obj, data[i]['parents'])
-                this.add(obj);
-            }
+        for (let i = 0; i < data.length; i++){
+            let obj = this.create_element(data[i]['type']);
+            this.temp_obj.push(obj);
         }
-        console.log(this.elements);
+        for (let i = 0; i < this.temp_obj.length; i++){
+            this.set_obj(this.temp_obj[i], i, data);
+        }
+
+        console.log(this.temp_obj);
     }
 
     set_color(obj){//установка цветов при рисовании
