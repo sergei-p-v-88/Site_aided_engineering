@@ -21,15 +21,17 @@
     <h2>Описание:</h2>
     <p>{{ project.description }}</p>
     <h2>Схема</h2>
-    {{ project.data }}
     <canvas id="calculated_scheme"></canvas>
     <script type="text/javascript">
 
         var data = {{ project.data|safe }};
 
 		var model = new Model("calculated_scheme", 400, 400);
-		var controller = new Controller(model);
+		/*var controller = new Controller(model);*/
+
         model.set_data(data);
+        model.draw_field();
+
 
 	</script>
     <h2>Создано:</h2>

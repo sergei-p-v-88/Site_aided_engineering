@@ -107,11 +107,14 @@ class Model{//класс схема
     }
 
     set_obj(obj, index_obj, data){
-        console.log(obj.constructor.name)
-        console.log(data[index_obj]['parents'])
+        //console.log(obj.constructor.name)
+        //console.log(data[index_obj]['parents'])
 
         if('data' in data[index_obj]){
+            //console.log("Устанавливаем data для: " + obj.constructor.name)
+            //console.log(data[index_obj]['data'])
             obj.set_data(data[index_obj]['data']);
+            //console.log(obj)
         }
         //радители объекта
         for (let i = 0; i < data[index_obj]['parents'].length; i++){
@@ -132,8 +135,8 @@ class Model{//класс схема
                 //console.log(dict_temp);
                 //console.log(JSON.stringify(dict_obj) === JSON.stringify(dict_temp));
                 if(JSON.stringify(dict_obj) === JSON.stringify(dict_temp)){
-                    console.log("ключ родителя")
-                    console.log(data[index_obj]['parents'][i]['name'])
+                    //console.log("ключ родителя")
+                    //console.log(data[index_obj]['parents'][i]['name'])
                     obj.parents[data[index_obj]['parents'][i]['name']] = this.temp_obj[j];
                 }
             }
@@ -141,17 +144,22 @@ class Model{//класс схема
     }
 
     set_data(data){
-        console.log("Функция добавление данных")
-        console.log(data);
+        //console.log("Функция добавление данных")
+        //console.log(data);
         for (let i = 0; i < data.length; i++){
             let obj = this.create_element(data[i]['type']);
             this.temp_obj.push(obj);
         }
         for (let i = 0; i < this.temp_obj.length; i++){
             this.set_obj(this.temp_obj[i], i, data);
-        }
+            //console.log(this)
 
-        console.log(this.temp_obj);
+        }
+        for(let k = 0; k < this.temp_obj.length; k++){
+            this.add(this.temp_obj[k]);
+        }
+        this.temp_obj = [];
+        //console.log(this.temp_obj);
     }
 
     set_color(obj){//установка цветов при рисовании
@@ -237,6 +245,7 @@ class Model{//класс схема
     }
 
     draw_field(){//метод рисования поля
+        console.log(this);
         //console.log("Метод рисования поля");
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);//очистка поля
         //рисование элементов
@@ -654,13 +663,16 @@ class Beam{
         let first_point = this.parents['Centerline'].parents['Start_point'];
         let second_point = this.parents['Centerline'].parents['End_point'];
         let alfa = this.get_inclination();
-        let betta = Math.atan((second_point.y - model.get_mouse_position()[1]) / (second_point.x - model.get_mouse_position()[0]));
-        let b = get_distance(second_point.x, second_point.y , model.get_mouse_position()[0], model.get_mouse_position()[1]);
+        let b;
+        let betta;
         //если балка уже полна
         if (this.isFull()){
             betta = Math.atan((second_point.y - this.parents['Point'].y) / (second_point.x - this.parents['Point'].x));
             b = get_distance(second_point.x, second_point.y , this.parents['Point'].x, this.parents['Point'].y);
             this.parents['Point'].radius = 0;
+        }else{
+            betta = Math.atan((second_point.y - model.get_mouse_position()[1]) / (second_point.x - model.get_mouse_position()[0]));
+            b = get_distance(second_point.x, second_point.y , model.get_mouse_position()[0], model.get_mouse_position()[1]);
         }
         this.height = b * Math.sin(betta - alfa);
         this.draw_points[0].set_coordinates([first_point.x + this.height * Math.sin(alfa), first_point.y - this.height * Math.cos(alfa)]);
@@ -699,7 +711,7 @@ class Hard_connection{
     }
 
     get_data(){
-        let data = {'type': this.constructor.name};
+        let data = {'type': this.constructor.name, 'data': this.height};
         data['parents'] = [];
         for (const [key, value] of Object.entries(this.parents)){
             let parent = value.get_data();
@@ -707,6 +719,10 @@ class Hard_connection{
             data['parents'].push(parent);
         }
         return data;
+    }
+
+    set_data(data){
+        this.height = data;
     }
 
     add_parent(model){//метод добавления родителя
@@ -733,23 +749,34 @@ class Hard_connection{
         let x;
         let y;
         let alfa;
-        if (this.parents['Centerline'] != null){//если осевая определена
-            let first_point = this.parents['Centerline'].parents['Start_point'];
-            let second_point = this.parents['Centerline'].parents['End_point'];
+        if (this.isFull()){
+            x = this.parents['Point'].x;
+            y = this.parents['Point'].y;
             if(this.parents['Centerline'].find_children('Beam') != -1){//если у осевой есть ребенок балка то возмем ширину от туда
                 this.height = Math.abs(this.parents['Centerline'].children[this.parents['Centerline'].find_children('Beam')].height) + style_canvas.base_height;
             }else{
                 this.height = style_canvas.base_height;
             }
             alfa = this.parents['Centerline'].get_inclination();
-            x = model.get_mouse_position()[0]
-            y = linear_equation(first_point, second_point, x);//координата y лежащая на осевой
-        }
-        if (this.parents['Point'] != null){
-            x = this.parents['Point'].x;
-            y = this.parents['Point'].y;
-            if(this.parents['Centerline'] == null){
-                alfa = Math.atan((model.get_mouse_position()[1] - this.parents['Point'].y) / (model.get_mouse_position()[0] - this.parents['Point'].x))
+        }else{
+            if (this.parents['Centerline'] != null){//если осевая определена
+                let first_point = this.parents['Centerline'].parents['Start_point'];
+                let second_point = this.parents['Centerline'].parents['End_point'];
+                if(this.parents['Centerline'].find_children('Beam') != -1){//если у осевой есть ребенок балка то возмем ширину от туда
+                    this.height = Math.abs(this.parents['Centerline'].children[this.parents['Centerline'].find_children('Beam')].height) + style_canvas.base_height;
+                }else{
+                    this.height = style_canvas.base_height;
+                }
+                alfa = this.parents['Centerline'].get_inclination();
+                x = model.get_mouse_position()[0]
+                y = linear_equation(first_point, second_point, x);//координата y лежащая на осевой
+            }
+            if (this.parents['Point'] != null){
+                x = this.parents['Point'].x;
+                y = this.parents['Point'].y;
+                if(this.parents['Centerline'] == null){
+                    alfa = Math.atan((model.get_mouse_position()[1] - this.parents['Point'].y) / (model.get_mouse_position()[0] - this.parents['Point'].x))
+                }
             }
         }
         this.draw_points[0].set_coordinates([x + this.height * Math.sin(alfa), y - this.height * Math.cos(alfa)]);
@@ -785,7 +812,7 @@ class Size{
     }
 
     get_data(){
-        let data = {'type': this.constructor.name};
+        let data = {'type': this.constructor.name, 'data': this.height};
         data['parents'] = [];
         for (const [key, value] of Object.entries(this.parents)){
             let parent = value.get_data();
@@ -793,6 +820,10 @@ class Size{
             data['parents'].push(parent);
         }
         return data;
+    }
+
+    set_data(data){
+        this.height = data;
     }
 
     add_parent(model){//метод добавления родителя
@@ -845,6 +876,10 @@ class Size{
             this.draw_points[1].set_coordinates([this.draw_points[2].x + this.height * Math.sin(alfa), this.draw_points[2].y - this.height * Math.cos(alfa)]);
         }else if(this.isFull()){
             this.parents['Point'].radius = 0;
+            alfa = this.parents['Centerline'].get_inclination()
+            this.draw_points[2] = this.parents['End_point'];
+            this.draw_points[0].set_coordinates([this.parents['Start_point'].x + this.height * Math.sin(alfa), this.parents['Start_point'].y - this.height * Math.cos(alfa)]);
+            this.draw_points[1].set_coordinates([this.draw_points[2].x + this.height * Math.sin(alfa), this.draw_points[2].y - this.height * Math.cos(alfa)]);
         }
     }
 
